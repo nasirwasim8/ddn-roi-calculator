@@ -122,48 +122,48 @@ export default function WhoBenefitsICP({ onNavigateToCalculator }: WhoBenefitsIC
   const ICPS = [
     {
       n: 1,
-      label: 'MLOps / Infra Engineers',
-      who: 'GPU utilization & cost per request',
+      label: 'MLOps & Infrastructure Engineers',
+      who: 'GPU Compute Efficiency, Prefill Tax, & Tokens/Sec/Watt',
       color: '#1A81AF',
       icon: <Server className="w-4 h-4" />,
       detail:
-        'MLOps engineers care about GPU efficiency metrics: tokens/second, utilization%, cost/request. The demo shows concrete reduction in tokens processed per request and the before/after TTFT numbers. KV Cache directly reduces GPU cycles per turn — a metric they already track.',
+        'MLOps teams track GPU compute saturation: TTFT (Time-To-First-Token), prefill compute vs decode efficiency, and tokens/sec/watt. Without persistent KV caching, 80%+ of GPU compute is repeatedly burned re-computing attention tensors for shared system prompts, tool definitions, and multi-turn context. DDN Infinia transforms this O(N²) prefill penalty into an O(1) RDMA retrieval, slashing prefill times from seconds to sub-100ms and freeing GPU compute for useful generative decode turns.',
     },
     {
       n: 2,
-      label: 'CTOs / VP Engineering',
-      who: 'Infrastructure budget & scale',
+      label: 'CTOs & VP of Engineering',
+      who: 'Capacity Scaling, Cluster Deferral, & Power Envelope',
       color: '#ED2738',
       icon: <TrendingDown className="w-4 h-4" />,
       detail:
-        'C-level executives need CapEx and OpEx numbers. The ROI Calculator translates token savings into DGX servers avoided ($300K each), power savings (kWh/year), and throughput multipliers (92× more users from same hardware). These are CFO-level conversations.',
+        'Engineering leaders face strict power, thermal, and capital ceilings. Expanding an AI cluster by adding 8-way GPU servers incurs substantial capital costs (typically $300K–$400K+ fully configured per node) plus megawatts of scarce data center power. The ROI Calculator models how offloading KV state to persistent Infinia storage yields 2×–5× concurrent stream capacity on existing nodes, deferring multimillion-dollar cluster expansions and keeping deployments within existing power and cooling budgets.',
     },
     {
       n: 3,
       label: 'AI Product Managers',
-      who: 'User experience & latency',
+      who: 'Perceived Latency (TTFT), Long Contexts, & User Experience',
       color: '#00C280',
       icon: <Zap className="w-4 h-4" />,
       detail:
-        'Product managers measure TTFT (time-to-first-token) as a core UX metric. Sub-100ms TTFT on repeated queries feels instant to users. The Chat Observatory shows this in real-time — same question, 10× faster response on the second ask.',
+        'Product managers optimize Time-To-First-Token (TTFT) and user retention. When users wait 3–6 seconds for an agent to re-ingest a 32K–128K document or system context, engagement drops. With Infinia KV caching, repeated turns and multi-agent workflows hit warm cache tensors in tens of milliseconds, providing immediate streaming response that feels conversational and responsive, while enabling richer, deeper context windows without UX penalties.',
     },
     {
       n: 4,
-      label: 'AI Platform Engineers',
-      who: 'vLLM prefix caching at enterprise scale',
+      label: 'AI Platform & Systems Architects',
+      who: 'Distributed Prefix Caching, vLLM / Dynamo, & NIXL RDMA',
       color: '#76B900',
       icon: <Database className="w-4 h-4" />,
       detail:
-        'Platform engineers building on vLLM or TensorRT-LLM already know about prefix caching. The DDN story is: "Infinia replaces ephemeral GPU HBM with a persistent, shared object store that survives scaling events and serves your entire GPU fleet." This is a direct architectural upgrade to what they\'re already building.',
+        'Platform architects running vLLM, TensorRT-LLM, or NVIDIA Dynamo recognize the ceiling of node-local VRAM: GPU memory is volatile, node-confined, and evicts rapidly under concurrency. DDN Infinia extends local PagedAttention into a cluster-wide, persistent key-value tier. Leveraging zero-copy GPU-Direct RDMA via NVIDIA NIXL v1.3, any GPU node in the cluster instantly reuses KV states cached by any other node with zero host CPU serialization.',
     },
     {
       n: 5,
-      label: 'Finance / Procurement',
-      who: 'Cloud vs on-prem ROI',
+      label: 'Finance & Procurement Executives',
+      who: 'CapEx Avoidance, Payback Period, & Neocloud Gross Margin',
       color: '#f59e0b',
       icon: <Users className="w-4 h-4" />,
       detail:
-        'Finance needs hard numbers with verifiable assumptions. The ROI Calculator shows the exact formula behind every KPI: servers avoided = ⌈requests/200K⌉ before caching minus after caching. Each assumption (DGX price, power draw, electricity rate) is visible and adjustable.',
+        'Finance teams require defensible, auditable math rather than fixed vendor claims. The ROI Calculator exposes every parameter: server node replacement cost, power draw per chassis, PUE, electricity tariff ($/kWh), or cloud GPU hourly rate ($/GPU-hr). For Neocloud inference providers, it models gross margin expansion from ~45% to ~87% by eliminating redundant GPU-hours, demonstrating cash-flow payback in under 6 months.',
     },
   ]
 
@@ -231,11 +231,11 @@ export default function WhoBenefitsICP({ onNavigateToCalculator }: WhoBenefitsIC
             </thead>
             <tbody>
               {[
-                { audience: 'MLOps / Infra', lead: 'Token count reduction (Prefix Cache Hit Rate)', close: 'GPU-hours freed/year & throughput headroom', color: '#1A81AF' },
-                { audience: 'CTO / VP Eng', lead: 'Throughput multiplier & concurrency scaling', close: 'CapEx avoided ($300K per DGX H100)', color: '#ED2738' },
-                { audience: 'AI Product', lead: 'TTFT difference on HIT vs MISS (<100ms)', close: 'Session Resume across any node in the cluster', color: '#00C280' },
-                { audience: 'Platform Eng', lead: 'NVIDIA Dynamo native container plugin & NIXL', close: 'Zero-copy RDMA bypassing CPU & POSIX layers', color: '#76B900' },
-                { audience: 'Finance / Procurement', lead: 'Neocloud (NCP) 87% gross margin expansion', close: 'Transparent slider formulas & payback period', color: '#f59e0b' },
+                { audience: 'MLOps / Infra', lead: 'TTFT & Prefill Reduction (Cold vs Warm telemetry)', close: 'GPU-hours freed/year & decode compute density', color: '#1A81AF' },
+                { audience: 'CTO / VP Eng', lead: 'Concurrency Multiplier (2×–5× stream headroom)', close: 'CapEx avoided (deferred node purchases) & power limits', color: '#ED2738' },
+                { audience: 'AI Product', lead: 'Conversational Responsiveness (sub-100ms TTFT)', close: 'Long-context retention & multi-turn agent UX', color: '#00C280' },
+                { audience: 'Platform Eng', lead: 'NVIDIA Dynamo NIXL container integration & RDMA', close: 'Cluster-wide cross-node KV sharing (bypassing POSIX)', color: '#76B900' },
+                { audience: 'Finance / Neocloud', lead: 'Neocloud Gross Margin Expansion (45% → 87%)', close: 'Configurable TCO model & hardware payback timeline', color: '#f59e0b' },
               ].map((row, i) => (
                 <tr
                   key={row.audience}
@@ -258,10 +258,10 @@ export default function WhoBenefitsICP({ onNavigateToCalculator }: WhoBenefitsIC
       <div>
         <SectionTitle><ArrowRight className="w-4 h-4" style={{ color: '#00C280' }} /> Core Executive Messaging</SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <TalkingPoint icon="🎯" title="Lead with useful tokens/second" body="Not raw tokens/second — useful tokens/second. How much of your GPU's compute is generating new business value vs re-reading context it already knows? That ratio is determined by your storage architecture." />
-          <TalkingPoint icon="📊" title="Defensible & Transparent Math" body="Every calculation in the ROI model exposes its mathematical derivation: concurrency expansion, avoided node counts, power savings, and gross margin delta. No black-box projections." />
-          <TalkingPoint icon="🔢" title="Dynamic Interactive Controls" body="Every assumption is visible and slider-controlled. Let customers plug in their real workload parameters — prompt lengths, concurrency, cluster size, and power cost. This builds instant credibility." />
-          <TalkingPoint icon="🏢" title="Neoclouds & Contact Centers" body="Neocloud inference providers expand gross margin from 45% to 87%. Enterprise contact centers avoid millions in redundant GPU servers. Start with the preset closest to their scale." />
+          <TalkingPoint icon="🎯" title="Lead with useful tokens/second" body="Raw tokens/second is a deceptive vanity metric if 80% of the GPU compute is spent re-digesting the exact same system prompt or context window. What matters is useful generation tokens per second per dollar. Persistent KV cache maximizes this ratio by eliminating redundant prefill computation." />
+          <TalkingPoint icon="📊" title="Production Stack with Live vLLM &amp; Infinia" body="This demo is powered by a production-grade inference stack: vLLM v1 engine with LMCache and DDN Infinia S3/RDMA storage substrate. Cold vs warm latency, token counts, and hit rates are live telemetry measured directly from GPU and storage calls — not static estimates." />
+          <TalkingPoint icon="🔢" title="Completely Transparent &amp; Defensible Math" body="Every formula in the ROI Calculator is transparent and slider-controlled. Customers can adjust their exact hardware cost, cluster size, power tariffs, prompt lengths, and concurrency targets. Grounding the business case in their own numbers builds immediate confidence." />
+          <TalkingPoint icon="🏢" title="Neocloud &amp; Enterprise Scale Scenarios" body="Whether modeling an enterprise contact center saving megawatts of power or a Neocloud inference provider scaling gross margins from 45% to 87% at $2.50/GPU-hr, the model proves that data architecture — not just raw GPU silicon — dictates AI economics." />
         </div>
       </div>
 

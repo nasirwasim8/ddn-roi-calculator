@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Sun, Moon, Calculator, Swords, HardDrive, Users, Share2, Printer, ExternalLink } from 'lucide-react'
+import { Sun, Moon, Play, Calculator, Swords, HardDrive, Users, Share2, Printer, ExternalLink } from 'lucide-react'
 import { useTheme } from './contexts/ThemeContext'
 import ROICalculator from './pages/ROICalculator'
 import CompetitiveBattlecard from './pages/CompetitiveBattlecard'
@@ -174,7 +174,35 @@ export default function App() {
               )}
             </button>
 
-            {/* Print / Export */}
+                        {/* Live Demo button */}
+            <button
+              onClick={() => {
+                switchTab('calculator')
+                setTimeout(() => {
+                  window.dispatchEvent(new CustomEvent('open-demo-modal'))
+                }, 50)
+              }}
+              title="Watch Live Cluster Demonstration & Telemetry"
+              style={{
+                padding: '7px 14px',
+                borderRadius: 9,
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer',
+                background: 'rgba(237,39,56,0.12)',
+                color: 'var(--ddn-red)',
+                border: '1px solid rgba(237,39,56,0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <Play style={{ width: 13, height: 13 }} fill="currentColor" />
+              <span>Live Demo</span>
+            </button>
+
+{/* Print / Export */}
             <button
               onClick={() => window.print()}
               title="Print or Save as PDF"
@@ -309,7 +337,13 @@ export default function App() {
           <CompetitiveBattlecard onNavigateToCalculator={() => switchTab('calculator')} />
         )}
         {activeTab === 'storage' && (
-          <StorageComparison onNavigateToCalculator={() => switchTab('calculator')} />
+          <StorageComparison
+            onNavigateToCalculator={() => switchTab('calculator')}
+            onOpenLiveDemo={() => {
+              switchTab('calculator')
+              setTimeout(() => window.dispatchEvent(new CustomEvent('open-demo-modal')), 50)
+            }}
+          />
         )}
         {activeTab === 'icp' && (
           <WhoBenefitsICP onNavigateToCalculator={() => switchTab('calculator')} />

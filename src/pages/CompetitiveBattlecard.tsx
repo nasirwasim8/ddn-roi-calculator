@@ -129,23 +129,23 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
       <div
         className="p-6 rounded-2xl border"
         style={{
-          background: 'linear-gradient(135deg, rgba(237,39,56,0.08) 0%, rgba(237,39,56,0.02) 100%)',
-          borderColor: 'rgba(237,39,56,0.3)',
+          background: 'linear-gradient(135deg, rgba(118,185,0,0.08) 0%, rgba(118,185,0,0.02) 100%)',
+          borderColor: 'rgba(118,185,0,0.3)',
         }}
       >
         <div className="flex items-start gap-4">
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-white font-bold shadow-md"
-            style={{ background: 'var(--ddn-red)' }}
+            style={{ background: '#76B900' }}
           >
             <Trophy className="w-6 h-6" />
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-[var(--ddn-red)]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#76B900]">
                 Competitive Architecture Battlecard
               </span>
-              <Tag color="var(--ddn-red)">DDN Infinia vs WEKA vs VAST</Tag>
+              <Tag color="#76B900">DDN Infinia vs WEKA vs VAST</Tag>
               <Tag color="#76B900">NVIDIA Dynamo NIXL Partner</Tag>
             </div>
             <h2 className="text-xl font-bold text-[var(--text-primary)]">
@@ -172,7 +172,7 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
             <div className="flex items-center gap-2 mb-3">
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                style={{ background: 'rgba(237,39,56,0.15)', color: 'var(--ddn-red)' }}
+                style={{ background: 'rgba(118,185,0,0.15)', color: '#76B900' }}
               >
                 <Layers className="w-4 h-4" />
               </div>
@@ -234,7 +234,7 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
       {/* The Battlecard Table */}
       <div>
         <SectionTitle>
-          <Trophy className="w-4 h-4" style={{ color: 'var(--ddn-red)' }} />
+          <Trophy className="w-4 h-4" style={{ color: '#76B900' }} />
           Architectural Comparison: DDN Infinia vs. WEKA vs. VAST Data
         </SectionTitle>
 
@@ -248,9 +248,9 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
                 <th className="p-3.5 font-bold uppercase tracking-wider text-[var(--text-muted)] w-1/4">
                   Feature / Dimension
                 </th>
-                <th className="p-3.5 font-bold text-center w-1/4" style={{ background: 'rgba(237,39,56,0.08)' }}>
-                  <div className="text-sm font-extrabold text-[var(--ddn-red)]">DDN Infinia</div>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--ddn-red)] text-white mt-1 inline-block">
+                <th className="p-3.5 font-bold text-center w-1/4" style={{ background: 'rgba(118,185,0,0.08)' }}>
+                  <div className="text-sm font-extrabold text-[#76B900]">DDN Infinia</div>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#76B900] text-white mt-1 inline-block">
                     Native KV Substrate
                   </span>
                 </th>
@@ -287,13 +287,13 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
                   <td
                     className="p-3.5 text-center align-top font-medium"
                     style={{
-                      background: 'rgba(237,39,56,0.04)',
+                      background: 'rgba(118,185,0,0.04)',
                       borderLeft: '1px solid var(--border-subtle)',
                       borderRight: '1px solid var(--border-subtle)',
                     }}
                   >
                     {row.infiniaHighlight ? (
-                      <span className="inline-block px-2.5 py-1 rounded-md text-xs font-bold text-[var(--ddn-red)] bg-[rgba(237,39,56,0.1)] border border-[rgba(237,39,56,0.25)]">
+                      <span className="inline-block px-2.5 py-1 rounded-md text-xs font-bold text-[#76B900] bg-[rgba(118,185,0,0.12)] border border-[rgba(118,185,0,0.3)]">
                         {row.infinia}
                       </span>
                     ) : (
@@ -328,7 +328,7 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
         </SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl border bg-[var(--surface-card)]" style={{ borderColor: 'var(--border-subtle)' }}>
-            <div className="text-xs font-bold text-[var(--ddn-red)] mb-1">1. "Don't Force a File System on a KV Workload"</div>
+            <div className="text-xs font-bold text-[#76B900] mb-1">1. "Don't Force a File System on a KV Workload"</div>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
               LLMs access KV cache strictly by cryptographic prefix hashes, not directory paths. Filesystem vendors have to wrap every chunk in file creation, metadata locks, and POSIX syscalls. Infinia provides native O(1) key-to-value addressing.
             </p>
@@ -355,13 +355,13 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
         <div
           className="p-5 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{
-            background: 'linear-gradient(135deg, rgba(237,39,56,0.06) 0%, rgba(118,185,0,0.06) 100%)',
-            borderColor: 'var(--border-subtle)',
+            background: 'linear-gradient(135deg, rgba(118,185,0,0.08) 0%, rgba(0,194,128,0.04) 100%)',
+            borderColor: 'rgba(118,185,0,0.25)',
           }}
         >
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Calculator className="w-4 h-4 text-[var(--ddn-red)]" />
+              <Calculator className="w-4 h-4 text-[#76B900]" />
               <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">
                 Quantify The Financial Advantage
               </span>
@@ -372,8 +372,8 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
           </div>
           <button
             onClick={onNavigateToCalculator}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-sm flex items-center gap-2 shrink-0 transition-transform active:scale-95"
-            style={{ background: 'var(--ddn-red)' }}
+            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white shadow-sm flex items-center gap-2 shrink-0 transition-transform active:scale-95 cursor-pointer"
+            style={{ background: '#76B900' }}
           >
             <span>Open ROI Calculator</span>
             <ArrowRight className="w-4 h-4" />

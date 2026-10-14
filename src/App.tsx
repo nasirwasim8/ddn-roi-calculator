@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Sun, Moon, Play, Calculator, Swords, HardDrive, Users, Share2, Printer, ExternalLink } from 'lucide-react'
+import { Sun, Moon, Play, Calculator, Swords, HardDrive, Users, Share2, Printer, ExternalLink, FileDown } from 'lucide-react'
 import { useTheme } from './contexts/ThemeContext'
 import ROICalculator from './pages/ROICalculator'
 import CompetitiveBattlecard from './pages/CompetitiveBattlecard'
@@ -202,10 +202,15 @@ export default function App() {
               <span>Live Demo</span>
             </button>
 
-{/* Print / Export */}
+            {/* Export Executive PDF */}
             <button
-              onClick={() => window.print()}
-              title="Print or Save as PDF"
+              onClick={() => {
+                switchTab('calculator')
+                setTimeout(() => {
+                  window.dispatchEvent(new CustomEvent('open-export-pdf-modal'))
+                }, 60)
+              }}
+              title="Export Executive PDF Assessment with Prospect Fields & DDN Disclaimers"
               className="hidden sm:inline-flex"
               style={{
                 padding: '7px 14px',
@@ -218,9 +223,10 @@ export default function App() {
                 color: 'var(--text-secondary)',
                 alignItems: 'center',
                 gap: 6,
+                transition: 'all 0.15s ease',
               }}
             >
-              <Printer style={{ width: 14, height: 14 }} />
+              <FileDown style={{ width: 14, height: 14, color: 'var(--ddn-red)' }} />
               <span>Export PDF</span>
             </button>
 

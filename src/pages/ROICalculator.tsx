@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calculator, TrendingUp, DollarSign, Zap, Users, Info, Server, Cloud, AlertTriangle, Play, X, ChevronDown, ExternalLink, Video, CheckCircle2 } from 'lucide-react'
+import { Calculator, TrendingUp, DollarSign, Zap, Users, Info, Server, Cloud, AlertTriangle, Play, X, ChevronDown, ExternalLink, Video, CheckCircle2, FileDown } from 'lucide-react'
+import { ExportPdfModal } from '../components/ExportPdfModal'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TierKey = 'ncp_provider' | 'self_hosted_h100' | 'cloud_api'
@@ -197,11 +198,17 @@ function KpiCard({ value, label, sublabel, color = '#00C280', suffix = '', fontS
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function ROICalculator() {
   const [showDemoModal, setShowDemoModal] = useState(false)
+  const [showPdfModal, setShowPdfModal] = useState(false)
   const [demoBannerOpen, setDemoBannerOpen] = useState(false)
   useEffect(() => {
     const handleOpenDemo = () => { setDemoBannerOpen(true); setShowDemoModal(true) }
+    const handleOpenExportPdf = () => setShowPdfModal(true)
     window.addEventListener('open-demo-modal', handleOpenDemo)
-    return () => window.removeEventListener('open-demo-modal', handleOpenDemo)
+    window.addEventListener('open-export-pdf-modal', handleOpenExportPdf)
+    return () => {
+      window.removeEventListener('open-demo-modal', handleOpenDemo)
+      window.removeEventListener('open-export-pdf-modal', handleOpenExportPdf)
+    }
   }, [])
   const YOUTUBE_DEMO_URL = '' // Drop in your YouTube embed URL here when available (e.g. https://www.youtube.com/embed/xxxxxx)
   const initial = PRESETS[0]
@@ -227,17 +234,30 @@ export default function ROICalculator() {
     <div className="space-y-6">
 
       {/* Header */}
-      <div className="section-header">
-        <h2 className="section-title flex items-center gap-2">
-          <Calculator className="w-6 h-6" style={{ color: 'var(--ddn-red)' }} />
-          Enterprise &amp; Neocloud ROI Calculator
-        </h2>
-        <p className="section-description">
-          Plug in your real workload parameters. The calculator models three distinct economic frameworks:
-          <strong> fleet concurrency &amp; gross margin expansion</strong> for Neocloud (NCP) inference providers,
-          <strong> throughput gain, CapEx avoidance &amp; power savings</strong> for on-prem enterprise clusters,
-          and <strong> direct token invoice reduction</strong> for cloud/API consumption.
-        </p>
+      <div className="section-header flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <h2 className="section-title flex items-center gap-2">
+            <Calculator className="w-6 h-6" style={{ color: 'var(--ddn-red)' }} />
+            Enterprise &amp; Neocloud ROI Calculator
+          </h2>
+          <p className="section-description">
+            Plug in your real workload parameters. The calculator models three distinct economic frameworks:
+            <strong> fleet concurrency &amp; gross margin expansion</strong> for Neocloud (NCP) inference providers,
+            <strong> throughput gain, CapEx avoidance &amp; power savings</strong> for on-prem enterprise clusters,
+            and <strong> direct token invoice reduction</strong> for cloud/API consumption.
+          </p>
+        </div>
+        <button
+          onClick={() => setShowPdfModal(true)}
+          className="self-start md:self-auto px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-md shrink-0 text-white hover:opacity-95 active:scale-95 cursor-pointer"
+          style={{
+            background: 'linear-gradient(135deg, var(--ddn-red) 0%, #B91C1C 100%)',
+          }}
+          title="Export customer assessment as an executive PDF"
+        >
+          <FileDown className="w-4 h-4" />
+          <span>Export to PDF</span>
+        </button>
       </div>
 
       {/* Tier model explainer banner */}
@@ -490,6 +510,43 @@ export default function ROICalculator() {
 
         {/* ── RIGHT: Results ── */}
         <div className="lg:col-span-3 space-y-5">
+
+          {/* ── Executive Export Deliverable Banner ── */}
+          <div
+            className="p-3.5 sm:p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(237,39,56,0.06) 0%, rgba(118,185,0,0.05) 100%)',
+              borderColor: 'var(--border-subtle)',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
+                style={{ background: 'var(--ddn-red)' }}
+              >
+                <FileDown className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                  <span>Executive Assessment Deliverable</span>
+                  <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[#00C280]/15 text-[#00C280] border border-[#00C280]/30 font-semibold uppercase">
+                    Ready to Export
+                  </span>
+                </div>
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                  Generate a branded 2-page PDF report with prospect fields, cluster sizing, and official DDN disclaimers.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowPdfModal(true)}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 transition-all shadow hover:opacity-95 active:scale-95 shrink-0 cursor-pointer"
+              style={{ background: 'linear-gradient(135deg, var(--ddn-red) 0%, #B91C1C 100%)' }}
+            >
+              <FileDown className="w-4 h-4" />
+              <span>Export to PDF</span>
+            </button>
+          </div>
 
           {/* ── TTFT Impact Card — always visible ── */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="card-elevated p-6" style={{ borderTop: '3px solid #76B900' }}>
@@ -976,6 +1033,23 @@ export default function ROICalculator() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* ── EXPORT PDF MODAL ── */}
+      <ExportPdfModal
+        isOpen={showPdfModal}
+        onClose={() => setShowPdfModal(false)}
+        reportData={{
+          workloadName: PRESETS.find(p => p.id === activePreset)?.label || 'Custom Scenario',
+          tierKey: tier,
+          tierLabel: TIERS[tier].label,
+          tierType: TIERS[tier].type,
+          systemTokens,
+          dailyRequests,
+          avgNewTokens,
+          hitRate,
+          roi,
+        }}
+      />
 
     </div>
   )

@@ -1,5 +1,4 @@
 import React from 'react'
-import DataPathRaceVisualizer from '../components/DataPathRaceVisualizer'
 import { Trophy, RefreshCw, Layers, Award, ArrowRight, Calculator, CheckCircle2, ShieldCheck } from 'lucide-react'
 
 function Tag({ children, color }: { children: React.ReactNode; color?: string }) {
@@ -231,9 +230,6 @@ export default function CompetitiveBattlecard({ onNavigateToCalculator }: Compet
           </div>
         </div>
       </div>
-
-      {/* Interactive Data Path Race Visualizer */}
-      <DataPathRaceVisualizer />
 
       {/* The Battlecard Table */}
       <div>

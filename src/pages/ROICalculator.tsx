@@ -265,17 +265,19 @@ export default function ROICalculator() {
       <div className="flex items-center gap-3 flex-wrap">
         {[{ n: 1, t: 'Does KV cache help?' }, { n: 2, t: 'Estimate ROI' }].map((x, i) => {
           const on = step === x.n, done = step > x.n
+          const act = x.n === 1 ? '#76B900' : 'var(--ddn-red)'
+          const actBg = x.n === 1 ? 'rgba(118,185,0,0.12)' : 'rgba(237,39,56,0.08)'
           return (
             <div key={x.n} className="flex items-center gap-3">
               {i > 0 && <div className="w-10 h-px" style={{ background: 'var(--border-subtle)' }} />}
               <button onClick={() => (x.n === 1 || feasibility) && setStep(x.n as 1 | 2)}
                 disabled={x.n === 2 && !feasibility}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all disabled:cursor-not-allowed"
-                style={{ borderColor: on ? 'var(--ddn-red)' : done ? '#00C280' : 'var(--border-subtle)',
-                         background: on ? 'rgba(237,39,56,0.08)' : done ? 'rgba(0,194,128,0.08)' : 'var(--surface-card)',
-                         color: on ? 'var(--ddn-red)' : done ? '#00C280' : 'var(--text-muted)' }}>
-                <span className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] text-white"
-                  style={{ background: on ? 'var(--ddn-red)' : done ? '#00C280' : '#9ca3af' }}>
+                className="flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-bold transition-all disabled:cursor-not-allowed"
+                style={{ borderColor: on ? act : done ? '#76B900' : 'var(--border-subtle)',
+                         background: on ? actBg : done ? 'rgba(118,185,0,0.08)' : 'var(--surface-card)',
+                         color: on ? act : done ? '#76B900' : 'var(--text-muted)' }}>
+                <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white"
+                  style={{ background: on ? act : done ? '#76B900' : '#9ca3af' }}>
                   {done ? <CheckCircle2 className="w-3.5 h-3.5" /> : x.n}
                 </span>
                 Step {x.n}: {x.t}

@@ -31,22 +31,22 @@ function Row({ label, hint, value, min, max, step, unit, color, onChange, ticks 
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{label}</div>
-          <div className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{hint}</div>
+          <div className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>{label}</div>
+          <div className="text-xs md:text-sm" style={{ color: 'var(--text-muted)' }}>{hint}</div>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <input type="number" min={min} max={unit === '%' ? 100 : 10000} step={step} value={value}
             onChange={e => onChange(Math.max(unit === '%' ? 0 : 1, Math.min(unit === '%' ? 100 : 10000, Number(e.target.value))))}
-            className="w-20 px-2 py-1 text-right font-mono font-bold text-sm rounded-lg border focus:outline-none"
+            className="w-24 px-2 py-1.5 text-right font-mono font-bold text-base rounded-lg border focus:outline-none"
             style={{ background: 'var(--surface-secondary)', borderColor: 'var(--border-subtle)', color: 'var(--text-primary)' }} />
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{unit}</span>
+          <span className="text-sm" style={{ color: 'var(--text-muted)' }}>{unit}</span>
         </div>
       </div>
       <input type="range" min={min} max={max} step={step} value={clamped}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full h-2 rounded-full appearance-none cursor-pointer"
+        className="w-full h-2.5 rounded-full appearance-none cursor-pointer"
         style={{ background: `linear-gradient(to right, ${color} ${pct}%, var(--surface-secondary) ${pct}%)`, accentColor: color }} />
-      <div className="flex justify-between text-[10px]" style={{ color: 'var(--text-muted)' }}>
+      <div className="flex justify-between text-xs" style={{ color: 'var(--text-muted)' }}>
         <span>{ticks[0]}</span><span>{ticks[1]}</span><span>{ticks[2]}</span>
       </div>
     </div>
@@ -78,7 +78,7 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
     return s.recomputeMs === recomputeMs && s.lookupMs === lookupMs && s.transferMs === transferMs && s.hitRatePct === hitRatePct
   })
 
-  const verdictColor = isBeneficial ? '#00C280' : '#ED2738'
+  const verdictColor = isBeneficial ? '#76B900' : '#ED2738'
   const bars = [
     { label: 'Full Recompute', ms: recomputeMs, bg: '#ED2738', text: `${recomputeMs} ms (GPU prefill)` },
     { label: 'Cache Hit Retrieval', ms: hitLatencyMs, bg: hitIsBeneficial ? '#00C280' : '#ED2738',
@@ -92,14 +92,14 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
       {/* Header */}
       <div className="flex items-start justify-between flex-wrap gap-4 pb-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-2"
-            style={{ background: 'var(--surface-secondary)', color: 'var(--text-secondary)' }}>
-            <HelpCircle className="w-3.5 h-3.5" style={{ color: 'var(--ddn-red)' }} /> Step 1 · Interactive KV Reuse Feasibility Model
+          <div className="inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1 rounded-full mb-2"
+            style={{ background: 'rgba(118,185,0,0.14)', color: '#76B900', border: '1px solid rgba(118,185,0,0.45)' }}>
+            <HelpCircle className="w-4 h-4" style={{ color: '#76B900' }} /> Step 1 · Interactive KV Reuse Feasibility Model
           </div>
-          <h3 className="text-lg md:text-xl font-extrabold" style={{ color: 'var(--text-primary)' }}>
+          <h3 className="text-xl md:text-2xl font-extrabold" style={{ color: 'var(--text-primary)' }}>
             Does KV cache reuse actually help your workload?
           </h3>
-          <p className="text-xs md:text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm md:text-base mt-1" style={{ color: 'var(--text-muted)' }}>
             Retrieving cached KV state only pays off when storage lookup + transfer is faster than letting the GPU recompute it.
             Adjust the four inputs or pick a scenario.
           </p>
@@ -123,10 +123,10 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
         <Row label="GPU recompute time" hint="Time for the GPU to rebuild KV state from scratch (prefill)" value={recomputeMs}
           min={50} max={5000} step={10} unit="ms" color="#ED2738" onChange={setRecomputeMs}
           ticks={['50 ms (short prompt)', '800 ms (baseline)', '5,000 ms (32K+ context)']} />
-        <Row label="G4 shared storage lookup" hint="Metadata / index lookup across cluster shared storage" value={lookupMs}
+        <Row label="RDMA direct single-hop lookup" hint="DDN Infinia + NVIDIA Dynamo: KV blocks located and fetched over GPU-Direct RDMA in a single hop, no CPU in the path" value={lookupMs}
           min={1} max={3000} step={1} unit="ms" color="#1A81AF" onChange={setLookupMs}
-          ticks={['1 ms (DDN Infinia)', '20 ms (baseline)', '3,000 ms (slow object store)']} />
-        <Row label="KV transfer & restore" hint="Fabric transit from G4 storage into GPU HBM" value={transferMs}
+          ticks={['1 ms (Infinia RDMA single hop)', '20 ms (baseline)', '3,000 ms (multi-hop / slow object store)']} />
+        <Row label="KV transfer & restore" hint="Zero-copy transfer from DDN Infinia into GPU HBM" value={transferMs}
           min={2} max={5000} step={2} unit="ms" color="#1A81AF" onChange={setTransferMs}
           ticks={['8 ms (GPU-Direct RoCE)', '150 ms (baseline)', '5,000 ms (slow TCP / WAN)']} />
         <Row label="Cache hit rate" hint="Share of requests that reuse a stored prefix or document" value={hitRatePct}
@@ -135,13 +135,14 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
       </div>
 
       {/* Latency bars */}
-      <div className="space-y-2.5">
+      <div className="space-y-3">
+        <div className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Latency comparison</div>
         {bars.map(b => (
           <div key={b.label} className="flex items-center gap-3">
-            <span className="w-36 shrink-0 font-mono text-[11px]" style={{ color: 'var(--text-muted)' }}>{b.label}</span>
-            <div className="flex-1 h-7 rounded-lg overflow-hidden" style={{ background: 'var(--surface-secondary)' }}>
-              <div className="h-full rounded-lg transition-all duration-500 flex items-center px-2 text-[11px] font-mono font-bold text-white whitespace-nowrap"
-                style={{ width: `${Math.max(Math.min((b.ms / maxScaleMs) * 100, 100), 6)}%`, background: b.bg }}>{b.text}</div>
+            <span className="w-48 shrink-0 text-base font-bold" style={{ color: 'var(--text-primary)' }}>{b.label}</span>
+            <div className="flex-1 h-11 rounded-lg overflow-hidden" style={{ background: 'var(--surface-secondary)' }}>
+              <div className="h-full rounded-lg transition-all duration-500 flex items-center px-3 text-sm md:text-base font-mono font-bold text-white whitespace-nowrap"
+                style={{ width: `${Math.max(Math.min((b.ms / maxScaleMs) * 100, 100), 22)}%`, background: b.bg }}>{b.text}</div>
             </div>
           </div>
         ))}
@@ -153,14 +154,14 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
           className="rounded-xl p-5 border flex flex-col md:flex-row md:items-center justify-between gap-4"
           style={{ background: `${verdictColor}12`, borderColor: `${verdictColor}66` }}>
           <div className="space-y-1">
-            <div className="flex items-center gap-2 font-extrabold text-sm md:text-base" style={{ color: verdictColor }}>
+            <div className="flex items-center gap-2 font-extrabold text-base md:text-lg" style={{ color: verdictColor }}>
               {isBeneficial ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
               {isBeneficial
                 ? `YES: KV cache helps (${timeSavedPct.toFixed(1)}% lower average latency)`
                 : 'NO GAIN: recomputing is faster than retrieving'}
             </div>
-            <p className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>
-              Lookup <strong>{lookupMs} ms</strong> + transfer <strong>{transferMs} ms</strong> = <strong>{hitLatencyMs} ms</strong> per hit,
+            <p className="text-sm md:text-base" style={{ color: 'var(--text-secondary)' }}>
+              RDMA single-hop lookup <strong>{lookupMs} ms</strong> + transfer <strong>{transferMs} ms</strong> = <strong>{hitLatencyMs} ms</strong> per hit,
               vs. <strong>{recomputeMs} ms</strong> GPU recompute.{' '}
               {isBeneficial
                 ? <>Average request time drops from <strong>{recomputeMs} ms</strong> to <strong>{expectedTimeMs.toFixed(0)} ms</strong>. Continue to size the business value.</>
@@ -178,7 +179,7 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
             <button disabled={!isBeneficial}
               onClick={() => onContinue({ recomputeMs, hitLatencyMs, expectedTimeMs, timeSavedPct, hitRatePct })}
               className="px-5 py-2.5 rounded-xl text-sm font-bold text-white flex items-center gap-2 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-              style={{ background: isBeneficial ? 'linear-gradient(135deg,#00C280,#0E9F6E)' : '#6b7280' }}
+              style={{ background: isBeneficial ? 'linear-gradient(135deg,#76B900,#5C9100)' : '#6b7280' }}
               title={isBeneficial ? 'Continue to the ROI model' : 'KV reuse must beat recompute before ROI applies'}>
               Step 2: Estimate ROI <ArrowRight className="w-4 h-4" />
             </button>
@@ -186,8 +187,8 @@ export function KvFeasibilityStep({ onContinue }: { onContinue: (r: FeasibilityR
         </motion.div>
       </AnimatePresence>
 
-      <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-        <strong>Rule:</strong> if T<sub>lookup</sub>(G4) + T<sub>transfer</sub> ≥ T<sub>recompute</sub>(GPU), caching produces no gain.
+      <p className="text-xs md:text-sm" style={{ color: 'var(--text-muted)' }}>
+        <strong>Rule:</strong> if T<sub>RDMA lookup</sub> + T<sub>transfer</sub> ≥ T<sub>recompute</sub>(GPU), caching produces no gain.
         Memory tiers: G1 GPU HBM · G2 host DRAM · G3 local NVMe · G4 shared/networked storage.
       </p>
     </div>

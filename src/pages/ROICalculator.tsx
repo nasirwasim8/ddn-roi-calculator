@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calculator, TrendingUp, DollarSign, Zap, Users, Info, Server, Cloud, AlertTriangle, Play, X, ChevronDown, ExternalLink, Video, CheckCircle2, FileDown } from 'lucide-react'
+import { Calculator, TrendingUp, DollarSign, Zap, Users, Info, Server, Cloud, AlertTriangle, Play, X, ChevronDown, ExternalLink, Video, CheckCircle2, FileDown, ArrowLeft } from 'lucide-react'
 import { ExportPdfModal } from '../components/ExportPdfModal'
+import { KvFeasibilityStep, type FeasibilityResult } from '../components/KvFeasibilityStep'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TierKey = 'ncp_provider' | 'self_hosted_h100' | 'cloud_api'
@@ -54,13 +55,10 @@ const TIERS: Record<string, TierConfig> = {
 
 // ─── Industry Presets ─────────────────────────────────────────────────────────
 const PRESETS: Preset[] = [
-  { id: 'ncp_cloud',      icon: '☁️', label: 'Neocloud (NCP) Multi-Tenant', industry: 'AI Cloud / GPU Provider',   systemTokens: 60_000,  dailyRequests: 10_000_000, avgNewTokens: 250, hitRate: 92, tier: 'ncp_provider', color: '#00C280' },
-  { id: 'contact_center', icon: '📞', label: 'Contact Center AI',      industry: 'Telecom / BPO',              systemTokens: 50_000,  dailyRequests: 500_000,   avgNewTokens: 200, hitRate: 85, tier: 'self_hosted_h100', color: '#2563EB' },
-  { id: 'legal_ai',       icon: '⚖️', label: 'Legal Document AI',      industry: 'Law Firm / LegalTech',       systemTokens: 120_000, dailyRequests: 50_000,    avgNewTokens: 500, hitRate: 70, tier: 'cloud_api',       color: '#1A81AF' },
-  { id: 'healthcare',     icon: '🏥', label: 'Clinical Decision AI',   industry: 'Hospital / Health System',   systemTokens: 80_000,  dailyRequests: 100_000,   avgNewTokens: 300, hitRate: 75, tier: 'cloud_api',       color: '#00C280' },
-  { id: 'fintech',        icon: '🏦', label: 'Financial Analyst AI',   industry: 'Investment Bank / FinTech',  systemTokens: 200_000, dailyRequests: 25_000,    avgNewTokens: 800, hitRate: 60, tier: 'self_hosted_h100', color: '#f59e0b' },
-  { id: 'ecommerce',      icon: '🛒', label: 'Retail / E-commerce AI', industry: 'Retail / Marketplace',       systemTokens: 30_000,  dailyRequests: 2_000_000, avgNewTokens: 100, hitRate: 90, tier: 'cloud_api',      color: '#8b5cf6' },
-  { id: 'custom',         icon: '⚙️', label: 'Custom Scenario',         industry: 'Your Organization',          systemTokens: 10_000,  dailyRequests: 100_000,   avgNewTokens: 250, hitRate: 70, tier: 'self_hosted_h100', color: '#6b7280' },
+  { id: 'ncp_cloud',  icon: '☁️', label: 'Neocloud (NCP) Multi-Tenant', industry: 'AI Cloud / GPU Provider', systemTokens: 60_000, dailyRequests: 10_000_000, avgNewTokens: 250, hitRate: 92, tier: 'ncp_provider', color: '#00C280' },
+  // Merged from: Contact Center, Legal Document, Clinical Decision, Financial Analyst, Retail / E-commerce AI
+  { id: 'enterprise', icon: '🏢', label: 'Large-Scale Enterprise',      industry: 'Contact Center · Legal · Healthcare · FinTech · Retail', systemTokens: 80_000, dailyRequests: 500_000, avgNewTokens: 300, hitRate: 80, tier: 'self_hosted_h100', color: '#2563EB' },
+  { id: 'custom',     icon: '⚙️', label: 'Custom Scenario',             industry: 'Your Organization',       systemTokens: 10_000, dailyRequests: 100_000,    avgNewTokens: 250, hitRate: 70, tier: 'self_hosted_h100', color: '#6b7280' },
 ]
 
 // ─── Math Engine ──────────────────────────────────────────────────────────────
@@ -212,6 +210,8 @@ export default function ROICalculator() {
   }, [])
   const YOUTUBE_DEMO_URL = 'https://www.youtube.com/embed/ix97_rhBs6A'
   const YOUTUBE_WATCH_URL = 'https://www.youtube.com/watch?v=ix97_rhBs6A'
+  const [step, setStep] = useState<1 | 2>(1)
+  const [feasibility, setFeasibility] = useState<FeasibilityResult | null>(null)
   const initial = PRESETS[0]
   const [activePreset, setActivePreset]   = useState(initial.id)
   const [systemTokens, setSystemTokens]   = useState(initial.systemTokens)
@@ -260,6 +260,50 @@ export default function ROICalculator() {
           <span>Export to PDF</span>
         </button>
       </div>
+
+      {/* ── 2-step flow indicator ── */}
+      <div className="flex items-center gap-3 flex-wrap">
+        {[{ n: 1, t: 'Does KV cache help?' }, { n: 2, t: 'Estimate ROI' }].map((x, i) => {
+          const on = step === x.n, done = step > x.n
+          return (
+            <div key={x.n} className="flex items-center gap-3">
+              {i > 0 && <div className="w-10 h-px" style={{ background: 'var(--border-subtle)' }} />}
+              <button onClick={() => (x.n === 1 || feasibility) && setStep(x.n as 1 | 2)}
+                disabled={x.n === 2 && !feasibility}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold transition-all disabled:cursor-not-allowed"
+                style={{ borderColor: on ? 'var(--ddn-red)' : done ? '#00C280' : 'var(--border-subtle)',
+                         background: on ? 'rgba(237,39,56,0.08)' : done ? 'rgba(0,194,128,0.08)' : 'var(--surface-card)',
+                         color: on ? 'var(--ddn-red)' : done ? '#00C280' : 'var(--text-muted)' }}>
+                <span className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] text-white"
+                  style={{ background: on ? 'var(--ddn-red)' : done ? '#00C280' : '#9ca3af' }}>
+                  {done ? <CheckCircle2 className="w-3.5 h-3.5" /> : x.n}
+                </span>
+                Step {x.n}: {x.t}
+              </button>
+            </div>
+          )
+        })}
+      </div>
+
+      {step === 1 && (
+        <KvFeasibilityStep onContinue={r => { setFeasibility(r); setStep(2) }} />
+      )}
+
+      {step === 2 && (<>
+      {/* Feasibility recap */}
+      {feasibility && (
+        <div className="flex items-center justify-between flex-wrap gap-3 px-5 py-3 rounded-xl border"
+          style={{ background: 'rgba(0,194,128,0.06)', borderColor: 'rgba(0,194,128,0.3)' }}>
+          <div className="flex items-center gap-2 text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>
+            <CheckCircle2 className="w-4 h-4" style={{ color: '#00C280' }} />
+            <span><strong style={{ color: '#00C280' }}>Feasibility confirmed:</strong> {feasibility.hitLatencyMs} ms retrieval vs {feasibility.recomputeMs} ms recompute
+              ({feasibility.timeSavedPct.toFixed(1)}% lower average latency at {feasibility.hitRatePct}% hit rate). Now size the business value.</span>
+          </div>
+          <button onClick={() => setStep(1)} className="text-xs font-semibold flex items-center gap-1 hover:underline cursor-pointer" style={{ color: 'var(--text-muted)' }}>
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Step 1
+          </button>
+        </div>
+      )}
 
       {/* Tier model explainer banner */}
       <AnimatePresence mode="wait">
@@ -388,7 +432,7 @@ export default function ROICalculator() {
 
       {/* Presets */}
       <div className="card p-5">
-        <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--text-secondary)' }}>Industry Presets</h3>
+        <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--text-secondary)' }}>Workload Presets</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {PRESETS.map(p => (
             <button key={p.id} onClick={() => applyPreset(p)}
@@ -896,6 +940,7 @@ export default function ROICalculator() {
 
         </div>
       </div>
+      </>)}
           {/* ── LIVE DEMO & VIDEO MODAL ── */}
       <AnimatePresence>
         {showDemoModal && (

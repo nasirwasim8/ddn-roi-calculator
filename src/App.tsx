@@ -35,8 +35,8 @@ const TABS: NavTab[] = [
   },
   {
     id: 'storage',
-    label: 'GPU vs Infinia Storage',
-    shortLabel: 'GPU vs Infinia',
+    label: 'Native NVIDIA KV Cache Integration',
+    shortLabel: 'NVIDIA KV Cache',
     badge: 'NVIDIA Dynamo NIXL',
     badgeColor: '#76B900',
     icon: HardDrive,

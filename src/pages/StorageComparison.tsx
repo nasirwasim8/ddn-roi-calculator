@@ -47,14 +47,14 @@ export default function StorageComparison({ onNavigateToCalculator, onOpenLiveDe
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <span className="text-sm font-bold uppercase tracking-wider text-[#76B900]">
-                Tiered Memory Architecture
+                NVIDIA Dynamo · NIXL Integration
               </span>
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#76B900]/15 text-[#76B900] border border-[#76B900]/30">
-                HBM vs. Infinia RDMA
+                Speed on-chip. Scale in Infinia.
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)]">
-              Core Principle — Speed on-chip. Scale in Infinia.
+              DDN Natively Integrated into NVIDIA KV Cache Management
             </h2>
             <p className="text-sm leading-relaxed text-[var(--text-secondary)] mt-2 max-w-4xl">
               GPU HBM is fast but <strong>finite and volatile</strong>. DDN Infinia with NIXL delivers{' '}

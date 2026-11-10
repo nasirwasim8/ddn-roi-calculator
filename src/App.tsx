@@ -275,61 +275,85 @@ export default function App() {
               WebkitOverflowScrolling: 'touch',
             }}
           >
-            {TABS.map((tab) => {
+            {TABS.map((tab, idx) => {
               const isActive = activeTab === tab.id
               const Icon = tab.icon
 
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => switchTab(tab.id)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '12px 14px',
-                    fontSize: 13,
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                    borderBottom: isActive ? '2px solid var(--ddn-red)' : '2px solid transparent',
-                    background: 'transparent',
-                    borderTop: 'none',
-                    borderLeft: 'none',
-                    borderRight: 'none',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.15s ease',
-                    marginBottom: -1,
-                  }}
-                >
-                  <Icon
+                <div key={tab.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  {/* Pipe divider between page tabs */}
+                  {idx > 0 && (
+                    <span aria-hidden style={{ color: 'var(--border-default, #9ca3af)', fontSize: 22, fontWeight: 300, padding: '0 4px', userSelect: 'none' }}>|</span>
+                  )}
+                  <button
+                    onClick={() => switchTab(tab.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={isActive ? '' : 'hover:brightness-95 hover:shadow-sm'}
                     style={{
-                      width: 16,
-                      height: 16,
-                      color: isActive ? 'var(--ddn-red)' : 'var(--text-muted)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: '10px 16px',
+                      margin: '10px 0',
+                      fontSize: 15,
+                      fontWeight: isActive ? 800 : 600,
+                      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                      background: isActive ? 'var(--surface-card)' : 'transparent',
+                      border: isActive ? '1.5px solid var(--ddn-red)' : '1.5px solid var(--border-subtle)',
+                      borderRadius: 12,
+                      boxShadow: isActive ? '0 4px 14px rgba(237,39,56,0.18)' : 'none',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.15s ease',
                     }}
-                  />
-                  <span>{tab.label}</span>
-
-                  {tab.badge && (
+                  >
+                    {/* Page number chip */}
                     <span
                       style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        letterSpacing: '0.04em',
-                        padding: '1px 7px',
-                        borderRadius: 999,
-                        background: isActive
-                          ? `${tab.badgeColor}20`
-                          : 'var(--surface-card)',
-                        color: tab.badgeColor ?? 'var(--text-muted)',
-                        border: `1px solid ${tab.badgeColor}40`,
+                        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                        fontSize: 12,
+                        fontWeight: 800,
+                        minWidth: 26,
+                        height: 22,
+                        padding: '0 6px',
+                        borderRadius: 6,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: isActive ? 'var(--ddn-red)' : 'var(--surface-card)',
+                        color: isActive ? '#fff' : 'var(--text-muted)',
+                        border: isActive ? 'none' : '1px solid var(--border-subtle)',
                       }}
                     >
-                      {tab.badge}
+                      {String(idx + 1).padStart(2, '0')}
                     </span>
-                  )}
-                </button>
+                    <Icon
+                      style={{
+                        width: 18,
+                        height: 18,
+                        color: isActive ? 'var(--ddn-red)' : 'var(--text-muted)',
+                      }}
+                    />
+                    <span>{tab.label}</span>
+
+                    {tab.badge && (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          padding: '2px 8px',
+                          borderRadius: 999,
+                          background: isActive ? `${tab.badgeColor}20` : 'var(--surface-card)',
+                          color: tab.badgeColor ?? 'var(--text-muted)',
+                          border: `1px solid ${tab.badgeColor}40`,
+                        }}
+                      >
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                </div>
               )
             })}
           </div>

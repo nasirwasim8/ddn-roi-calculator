@@ -161,15 +161,15 @@ function Slider({ label, value, min, max, step, onChange, format, hint, color = 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{label}</label>
-        <span className="font-mono font-bold text-sm px-3 py-0.5 rounded-lg" style={{ background: `${color}18`, color }}>{format(value)}</span>
+        <label className="text-base font-medium" style={{ color: 'var(--text-primary)' }}>{label}</label>
+        <span className="font-mono font-bold text-base px-3 py-0.5 rounded-lg" style={{ background: `${color}18`, color }}>{format(value)}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full h-2 rounded-full appearance-none cursor-pointer"
+        className="w-full h-2.5 rounded-full appearance-none cursor-pointer"
         style={{ background: `linear-gradient(to right, ${color} ${pct}%, var(--surface-secondary) ${pct}%)`, accentColor: color }}
       />
-      {hint && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{hint}</p>}
+      {hint && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{hint}</p>}
     </div>
   )
 }
@@ -177,7 +177,7 @@ function Slider({ label, value, min, max, step, onChange, format, hint, color = 
 function KpiCard({ value, label, sublabel, color = '#00C280', suffix = '', fontSize }: {
   value: string; label: string; sublabel?: string; color?: string; suffix?: string; fontSize?: string
 }) {
-  const defaultSize = value.length > 7 ? 'clamp(0.95rem, 1.7vw, 1.35rem)' : 'clamp(1.2rem, 2.5vw, 1.8rem)'
+  const defaultSize = value.length > 7 ? 'clamp(1.15rem, 2vw, 1.7rem)' : 'clamp(1.45rem, 3vw, 2.25rem)'
   return (
     <motion.div key={value + label} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
       className="text-center p-4 rounded-2xl flex flex-col justify-between" style={{ background: `${color}0f`, border: `1px solid ${color}25` }}>
@@ -186,8 +186,8 @@ function KpiCard({ value, label, sublabel, color = '#00C280', suffix = '', fontS
         {value}{suffix}
       </div>
       <div>
-        <div className="text-xs font-bold uppercase tracking-wide" style={{ color: `${color}bb` }}>{label}</div>
-        {sublabel && <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{sublabel}</div>}
+        <div className="text-sm font-bold uppercase tracking-wide" style={{ color: `${color}bb` }}>{label}</div>
+        {sublabel && <div className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>{sublabel}</div>}
       </div>
     </motion.div>
   )
@@ -296,12 +296,12 @@ export default function ROICalculator() {
       {feasibility && (
         <div className="flex items-center justify-between flex-wrap gap-3 px-5 py-3 rounded-xl border"
           style={{ background: 'rgba(0,194,128,0.06)', borderColor: 'rgba(0,194,128,0.3)' }}>
-          <div className="flex items-center gap-2 text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <div className="flex items-center gap-2 text-sm md:text-base" style={{ color: 'var(--text-secondary)' }}>
             <CheckCircle2 className="w-4 h-4" style={{ color: '#00C280' }} />
             <span><strong style={{ color: '#00C280' }}>Feasibility confirmed:</strong> {feasibility.hitLatencyMs} ms retrieval vs {feasibility.recomputeMs} ms recompute
               ({feasibility.timeSavedPct.toFixed(1)}% lower average latency at {feasibility.hitRatePct}% hit rate). Now size the business value.</span>
           </div>
-          <button onClick={() => setStep(1)} className="text-xs font-semibold flex items-center gap-1 hover:underline cursor-pointer" style={{ color: 'var(--text-muted)' }}>
+          <button onClick={() => setStep(1)} className="text-sm font-semibold flex items-center gap-1 hover:underline cursor-pointer" style={{ color: 'var(--text-muted)' }}>
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Step 1
           </button>
         </div>
@@ -325,7 +325,7 @@ export default function ROICalculator() {
             <Server className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#76B900' }} />
           )}
           <div>
-            <div className="font-semibold text-sm" style={{ color: isNcp ? '#00C280' : isCloud ? '#1A81AF' : '#76B900' }}>
+            <div className="font-semibold text-base" style={{ color: isNcp ? '#00C280' : isCloud ? '#1A81AF' : '#76B900' }}>
               {isNcp
                 ? '☁️ Neocloud Provider (NCP) — Fleet Yield & Gross Margin Model'
                 : isCloud
@@ -333,7 +333,7 @@ export default function ROICalculator() {
                 : '🖥️ Dedicated GPU Fleet — Capacity & CapEx Model'
               }
             </div>
-            <div className="text-xs mt-1 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            <div className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               {isNcp
                 ? 'You sell inference capacity and GPU compute to enterprise tenants. Every cache hit bypasses massive prefill recomputation, freeing your GPUs to serve more paying users simultaneously, collapsing your Cost Per Token (CPT), and expanding your gross margin from ~45% to over 87%.'
                 : isCloud
@@ -366,14 +366,14 @@ export default function ROICalculator() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-xs sm:text-sm font-bold text-[var(--text-primary)]">
+                <h4 className="text-sm sm:text-base font-bold text-[var(--text-primary)]">
                   Validated on Real GPU Silicon — Watch The Live Demonstration
                 </h4>
-                <span className="hidden sm:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ED2738]/15 text-[#ED2738] border border-[#ED2738]/30">
+                <span className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ED2738]/15 text-[#ED2738] border border-[#ED2738]/30">
                   Live Testbed
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+              <p className="text-sm text-[var(--text-muted)] mt-0.5">
                 {demoBannerOpen
                   ? 'Click to collapse demonstration details'
                   : 'Click to expand live vLLM + LMCache + DDN Infinia benchmark proof & video walkthrough'}
@@ -382,7 +382,7 @@ export default function ROICalculator() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs font-semibold text-[var(--text-muted)] hidden md:inline">
+            <span className="text-sm font-semibold text-[var(--text-muted)] hidden md:inline">
               {demoBannerOpen ? 'Collapse' : 'Expand Demo Proof'}
             </span>
             <ChevronDown
@@ -406,10 +406,10 @@ export default function ROICalculator() {
                 style={{ borderColor: 'var(--border-subtle)' }}
               >
                 <div className="flex-1">
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed max-w-2xl">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed max-w-2xl">
                     Every TTFT drop and capacity multiplier in this calculator is measured on our live testbed running <strong>vLLM v1 + LMCache + DDN Infinia S3/RDMA</strong>. See 4,200ms cold prefill drop to 56ms warm retrieval with zero-copy GPU-Direct RDMA.
                   </p>
-                  <div className="mt-2.5 flex flex-wrap gap-2 text-[10px] font-mono text-[var(--text-muted)]">
+                  <div className="mt-2.5 flex flex-wrap gap-2 text-xs font-mono text-[var(--text-muted)]">
                     <span className="px-2 py-0.5 rounded bg-[var(--surface-secondary)] border">Cold Prefill: 4,218ms</span>
                     <span className="px-2 py-0.5 rounded bg-[var(--surface-secondary)] border text-[#00C280] font-bold">Warm Infinia Hit: 56ms</span>
                     <span className="px-2 py-0.5 rounded bg-[var(--surface-secondary)] border text-[#76B900]">Concurrency: 4.8× Multiplier</span>
@@ -419,7 +419,7 @@ export default function ROICalculator() {
                 <div className="flex items-center gap-2.5 shrink-0 w-full md:w-auto">
                   <button
                     onClick={() => setShowDemoModal(true)}
-                    className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow-sm flex items-center justify-center gap-2 transition-transform active:scale-95"
+                    className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl text-sm font-bold text-white shadow-sm flex items-center justify-center gap-2 transition-transform active:scale-95"
                     style={{ background: 'var(--ddn-red)' }}
                   >
                     <Play className="w-3.5 h-3.5" fill="#fff" />
@@ -434,18 +434,18 @@ export default function ROICalculator() {
 
       {/* Presets */}
       <div className="card p-5">
-        <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--text-secondary)' }}>Workload Presets</h3>
+        <h3 className="text-base font-semibold mb-4" style={{ color: 'var(--text-secondary)' }}>Workload Presets</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {PRESETS.map(p => (
             <button key={p.id} onClick={() => applyPreset(p)}
               className="p-4 rounded-xl border text-left transition-all duration-200"
               style={{ borderColor: activePreset === p.id ? p.color : 'var(--border-subtle)', background: activePreset === p.id ? `${p.color}0d` : 'var(--surface-card)', boxShadow: activePreset === p.id ? `0 0 0 2px ${p.color}30` : 'none' }}>
-              <div className="text-xl mb-1">{p.icon}</div>
-              <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{p.label}</div>
-              <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{p.industry}</div>
+              <div className="text-2xl mb-1">{p.icon}</div>
+              <div className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>{p.label}</div>
+              <div className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{p.industry}</div>
               <div className="mt-2 flex flex-wrap gap-1">
-                <span className="text-xs px-2 py-0.5 rounded-full font-mono" style={{ background: `${p.color}18`, color: p.color }}>{fmtNum(p.systemTokens)} tokens</span>
-                <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--surface-secondary)', color: 'var(--text-muted)' }}>{fmtNum(p.dailyRequests)}/day</span>
+                <span className="text-sm px-2 py-0.5 rounded-full font-mono" style={{ background: `${p.color}18`, color: p.color }}>{fmtNum(p.systemTokens)} tokens</span>
+                <span className="text-sm px-2 py-0.5 rounded-full" style={{ background: 'var(--surface-secondary)', color: 'var(--text-muted)' }}>{fmtNum(p.dailyRequests)}/day</span>
               </div>
             </button>
           ))}
@@ -457,7 +457,7 @@ export default function ROICalculator() {
 
         {/* Workload sliders */}
         <div className="card-elevated p-6 space-y-6" style={{ borderLeft: `3px solid ${accent}` }}>
-          <h3 className="font-semibold text-sm uppercase tracking-wider" style={{ color: accent }}>Workload Parameters</h3>
+          <h3 className="font-semibold text-base uppercase tracking-wider" style={{ color: accent }}>Workload Parameters</h3>
           <Slider label="System Prompt Size" value={systemTokens} min={1000} max={500000} step={1000}
             onChange={setSystemTokens} format={v => `${fmtNum(v)} tokens`} color={accent}
             hint="Shared context per request — contract, manual, compliance script, clinical notes, etc." />
@@ -474,43 +474,43 @@ export default function ROICalculator() {
 
         {/* GPU Compute Breakdown */}
         <div className="card p-5" style={{ borderLeft: `3px solid ${accent}` }}>
-          <div className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: accent }}>
+          <div className="font-semibold text-base mb-3 flex items-center gap-2" style={{ color: accent }}>
             <Zap className="w-4 h-4" /> GPU Compute Breakdown
           </div>
-          <p className="text-xs mb-4 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             This shows how many GPU tokens are skipped on each cache hit — the foundation for every number in the results panel.
           </p>
 
           {/* Visual token bars */}
           <div className="space-y-3 mb-4">
             <div>
-              <div className="flex justify-between text-xs mb-1">
+              <div className="flex justify-between text-sm mb-1">
                 <span className="text-[var(--text-secondary)] font-medium">Gross Context Demand — total prompt tokens</span>
                 <span className="font-mono font-bold text-[var(--text-primary)]">{fmtNum(systemTokens + avgNewTokens)} tokens</span>
               </div>
               <div className="h-5 rounded-full overflow-hidden" style={{ background: 'var(--surface-secondary)' }}>
                 <motion.div className="h-full rounded-full" style={{ background: 'var(--neutral-400, #94A3B8)', width: '100%' }} initial={{ width: 0 }} animate={{ width: '100%' }} />
               </div>
-              <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+              <div className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
                 Total token demand per query: System prompt ({fmtNum(systemTokens)}) + question ({avgNewTokens})
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-xs mb-1" style={{ color: '#00C280' }}>
+              <div className="flex justify-between text-sm mb-1" style={{ color: '#00C280' }}>
                 <span className="font-medium">Active Compute with DDN Infinia — only incremental tokens processed</span>
                 <span className="font-mono font-bold">{avgNewTokens} tokens</span>
               </div>
               <div className="h-5 rounded-full overflow-hidden" style={{ background: 'var(--surface-secondary)' }}>
                 <motion.div className="h-full rounded-full" style={{ background: 'linear-gradient(90deg, #00C280, #4deba0)', width: `${(avgNewTokens / (systemTokens + avgNewTokens)) * 100}%` }} initial={{ width: 0 }} animate={{ width: `${(avgNewTokens / (systemTokens + avgNewTokens)) * 100}%` }} />
               </div>
-              <div className="text-xs mt-1 text-[#00C280]">
+              <div className="text-sm mt-1 text-[#00C280]">
                 {((systemTokens / (systemTokens + avgNewTokens)) * 100).toFixed(1)}% prefill compute offloaded to Infinia KV storage
               </div>
             </div>
           </div>
 
           {/* Formula table */}
-          <div className="rounded-xl overflow-hidden border text-xs" style={{ borderColor: 'var(--border-subtle)' }}>
+          <div className="rounded-xl overflow-hidden border text-sm" style={{ borderColor: 'var(--border-subtle)' }}>
             {[
               { label: 'Tokens skipped per cache hit',   formula: `${fmtNum(systemTokens)} (system prompt)`,                                          value: `${fmtNum(systemTokens)} tokens`,             c: '#00C280' },
               { label: 'GPU seconds saved per hit',      formula: `${fmtNum(systemTokens)} tokens ÷ 3,000 tok/s`,                                     value: `${(systemTokens / 3000).toFixed(2)}s`,       c: '#76B900' },
@@ -523,7 +523,7 @@ export default function ROICalculator() {
                   <span style={{ color: 'var(--text-secondary)' }}>{row.label}</span>
                   <span className="font-mono font-bold ml-2 flex-shrink-0" style={{ color: row.c }}>{row.value}</span>
                 </div>
-                <div className="font-mono text-xs mt-0.5" style={{ color: 'var(--text-muted)', fontSize: '0.65rem' }}>
+                <div className="font-mono text-sm mt-0.5" style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   = {row.formula}
                 </div>
               </div>
@@ -538,17 +538,17 @@ export default function ROICalculator() {
         {/* Tier picker */}
         <div className="lg:col-span-2">
           <div className="card p-5">
-            <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>Infrastructure / Billing Model</h3>
+            <h3 className="text-base font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>Infrastructure / Billing Model</h3>
             <div className="space-y-2">
               {Object.entries(TIERS).map(([key, t]) => (
                 <button key={key} onClick={() => setTier(key)}
                   className="w-full p-3 rounded-xl border text-left transition-all"
                   style={{ borderColor: tier === key ? t.color : 'var(--border-subtle)', background: tier === key ? `${t.color}0d` : 'var(--surface-card)' }}>
                   <div className="flex items-center justify-between">
-                    <div className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{t.label}</div>
+                    <div className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>{t.label}</div>
                     {tier === key && <div className="w-2 h-2 rounded-full" style={{ background: t.color }} />}
                   </div>
-                  <div className="text-xs mt-1 leading-snug" style={{ color: 'var(--text-muted)' }}>{t.description}</div>
+                  <div className="text-sm mt-1 leading-snug" style={{ color: 'var(--text-muted)' }}>{t.description}</div>
                 </button>
               ))}
             </div>
@@ -574,20 +574,20 @@ export default function ROICalculator() {
                 <FileDown className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xs sm:text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <div className="text-sm sm:text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
                   <span>Executive Assessment Deliverable</span>
-                  <span className="text-[10px] font-mono px-2 py-0.2 rounded-full bg-[#00C280]/15 text-[#00C280] border border-[#00C280]/30 font-semibold uppercase">
+                  <span className="text-xs font-mono px-2 py-0.2 rounded-full bg-[#00C280]/15 text-[#00C280] border border-[#00C280]/30 font-semibold uppercase">
                     Ready to Export
                   </span>
                 </div>
-                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                <p className="text-sm text-[var(--text-muted)] mt-0.5">
                   Generate a branded 2-page PDF report with prospect fields, cluster sizing, and official DDN disclaimers.
                 </p>
               </div>
             </div>
             <button
               onClick={() => setShowPdfModal(true)}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 transition-all shadow hover:opacity-95 active:scale-95 shrink-0 cursor-pointer"
+              className="px-4 py-2 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all shadow hover:opacity-95 active:scale-95 shrink-0 cursor-pointer"
               style={{ background: 'linear-gradient(135deg, var(--ddn-red) 0%, #B91C1C 100%)' }}
             >
               <FileDown className="w-4 h-4" />
@@ -602,7 +602,7 @@ export default function ROICalculator() {
                 <Zap className="w-5 h-5 text-[#76B900]" />
                 TTFT Impact — Time-To-First-Token
               </h3>
-              <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: '#76B90018', color: '#76B900' }}>
+              <span className="text-sm px-3 py-1 rounded-full font-semibold" style={{ background: '#76B90018', color: '#76B900' }}>
                 Same GPU · Same model
               </span>
             </div>
@@ -626,7 +626,7 @@ export default function ROICalculator() {
                 color="#76B900"
               />
             </div>
-            <div className="rounded-xl p-3 text-xs space-y-1.5" style={{ background: 'rgba(118,185,0,0.04)', border: '1px solid rgba(118,185,0,0.12)' }}>
+            <div className="rounded-xl p-3 text-sm space-y-1.5" style={{ background: 'rgba(118,185,0,0.04)', border: '1px solid rgba(118,185,0,0.12)' }}>
               <div className="font-semibold mb-1" style={{ color: '#76B900' }}>How we calculate TTFT:</div>
               <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                 Cold = {fmtNum(systemTokens)} tokens ÷ 10,000 tok/s (H100 DGX 8×, 70B-class, vLLM) = <span style={{ color: '#ED2738' }}>{roi.ttftColdMs >= 1000 ? `${(roi.ttftColdMs/1000).toFixed(1)}s` : `${roi.ttftColdMs}ms`}</span>
@@ -637,7 +637,7 @@ export default function ROICalculator() {
               <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                 Speedup = {roi.ttftColdMs >= 1000 ? `${(roi.ttftColdMs/1000).toFixed(1)}s` : `${roi.ttftColdMs}ms`} ÷ {roi.ttftWarmMs}ms = <span style={{ color: '#76B900' }}>{roi.ttftSpeedupX}× faster first token</span>
               </div>
-              <div className="pt-1 mt-1 border-t text-xs" style={{ borderColor: 'rgba(118,185,0,0.12)', color: 'var(--text-muted)' }}>
+              <div className="pt-1 mt-1 border-t text-sm" style={{ borderColor: 'rgba(118,185,0,0.12)', color: 'var(--text-muted)' }}>
                 Throughput scales by model: 8B ≈ 50K tok/s · 70B ≈ 8–15K tok/s · 405B ≈ 2–4K tok/s. Infinia retrieval: ~50ms demo, sub-10ms production target with NIXL GPU-Direct RDMA.
               </div>
             </div>
@@ -652,9 +652,9 @@ export default function ROICalculator() {
                     <Cloud className="w-5 h-5" style={{ color: '#00C280' }} />
                     Neocloud (NCP) Fleet Yield &amp; Margin Expansion
                   </h3>
-                  <div className="text-xs text-[var(--text-muted)] mt-0.5">Commercial GPU inference cloud economics (CoreWeave / Lambda / Nebius model)</div>
+                  <div className="text-sm text-[var(--text-muted)] mt-0.5">Commercial GPU inference cloud economics (CoreWeave / Lambda / Nebius model)</div>
                 </div>
-                <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: '#00C28018', color: '#00C280' }}>
+                <span className="text-sm px-3 py-1 rounded-full font-semibold" style={{ background: '#00C28018', color: '#00C280' }}>
                   NCP Tier
                 </span>
               </div>
@@ -699,8 +699,8 @@ export default function ROICalculator() {
               </div>
 
               {/* Methodology & Proof Points */}
-              <div className="rounded-xl p-4 text-xs space-y-2" style={{ background: 'rgba(0,194,128,0.06)', border: '1px solid rgba(0,194,128,0.2)' }}>
-                <div className="font-semibold text-sm" style={{ color: '#00C280' }}>Economic Methodology &amp; Verified Calculation:</div>
+              <div className="rounded-xl p-4 text-sm space-y-2" style={{ background: 'rgba(0,194,128,0.06)', border: '1px solid rgba(0,194,128,0.2)' }}>
+                <div className="font-semibold text-base" style={{ color: '#00C280' }}>Economic Methodology &amp; Verified Calculation:</div>
                 <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                   1. Prefill Bottleneck: {fmtNum(systemTokens)} tokens ÷ 10,000 tok/s = <span style={{ color: '#ED2738' }}>{(systemTokens/10000).toFixed(2)}s GPU prefill saved per hit</span>
                 </div>
@@ -713,7 +713,7 @@ export default function ROICalculator() {
                 <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                   4. CapEx Equivalence: {fmtNum(roi.gpuHoursSavedPerDay)} hrs/day ÷ (24h × 8 GPUs/node) = <span style={{ color: '#1A81AF', fontWeight: 'bold' }}>{roi.serversAvoided} DGX H100 servers avoided ({fmt$(roi.capexAvoidance)})</span>
                 </div>
-                <div className="pt-2 mt-2 border-t text-xs leading-relaxed" style={{ borderColor: 'rgba(0,194,128,0.2)', color: 'var(--text-muted)' }}>
+                <div className="pt-2 mt-2 border-t text-sm leading-relaxed" style={{ borderColor: 'rgba(0,194,128,0.2)', color: 'var(--text-muted)' }}>
                   <strong>Industry Reality:</strong> In multi-tenant inference clouds, prefill saturation is the primary cause of GPU queue latency and high COGS.
                   Offloading KV tensors to DDN Infinia converts compute-bound prefill into low-latency memory retrieval, enabling NCPs to pack 3×–5× more tenant requests onto existing nodes while boosting operating margins above 85%.
                 </div>
@@ -729,7 +729,7 @@ export default function ROICalculator() {
                   <DollarSign className="w-5 h-5" style={{ color: TIERS[tier].color }} />
                   Build vs. Buy TCO: Commercial API vs. Self-Hosted Infinia
                 </h3>
-                <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: `${TIERS[tier].color}18`, color: TIERS[tier].color }}>{TIERS[tier].label}</span>
+                <span className="text-sm px-3 py-1 rounded-full font-semibold" style={{ background: `${TIERS[tier].color}18`, color: TIERS[tier].color }}>{TIERS[tier].label}</span>
               </div>
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <KpiCard value={fmt$(roi.dailySavingsCloud)} label="Daily Net Savings" sublabel={`${fmtNum(roi.dailyHits)} cache hits/day`} color={TIERS[tier].color} />
@@ -741,7 +741,7 @@ export default function ROICalculator() {
                 <KpiCard value={`${roi.throughputMultiplier.toFixed(0)}×`} label="Throughput Multiplier" sublabel="Higher throughput on local GPUs" color="#1A81AF" />
               </div>
               {/* Formula breakdown */}
-              <div className="rounded-xl p-3 text-xs space-y-1.5" style={{ background: 'rgba(26,129,175,0.06)', border: '1px solid rgba(26,129,175,0.15)' }}>
+              <div className="rounded-xl p-3 text-sm space-y-1.5" style={{ background: 'rgba(26,129,175,0.06)', border: '1px solid rgba(26,129,175,0.15)' }}>
                 <div className="font-semibold" style={{ color: TIERS[tier].color }}>How this Build vs. Buy comparison works:</div>
                 <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                   Baseline Commercial API invoice = {fmt$(roi.costNoCache)}/mo (at ${TIERS[tier].costPer1kTokens.toFixed(4)}/1K input tokens)
@@ -752,7 +752,7 @@ export default function ROICalculator() {
                 <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                   Net Monthly Enterprise Savings = <span style={{ color: '#00C280', fontWeight: 'bold' }}>{fmt$(roi.monthlySavingsCloud)}/mo ({roi.costReductionPct.toFixed(0)}% TCO reduction)</span>
                 </div>
-                <div className="pt-2 mt-2 border-t text-xs leading-relaxed" style={{ borderColor: 'rgba(26,129,175,0.2)', color: 'var(--text-muted)' }}>
+                <div className="pt-2 mt-2 border-t text-sm leading-relaxed" style={{ borderColor: 'rgba(26,129,175,0.2)', color: 'var(--text-muted)' }}>
                   <strong>The Enterprise Reality:</strong> High-volume prompt workloads (Contact Centers, Enterprise RAG, Document AI) rack up massive monthly bills on commercial APIs.
                   Self-hosting open models (e.g. Llama 3.3 70B, Nemotron) with DDN Infinia eliminates prefill bottlenecks, giving enterprises full data sovereignty and slashing recurring token bills by up to 85%.
                 </div>
@@ -768,11 +768,11 @@ export default function ROICalculator() {
                   <Server className="w-5 h-5 text-[#76B900]" />
                   Self-Hosted Value: 3 Sources
                 </h3>
-                <span className="text-xs px-3 py-1 rounded-full font-semibold" style={{ background: '#76B90018', color: '#76B900' }}>On-Prem / Data Center</span>
+                <span className="text-sm px-3 py-1 rounded-full font-semibold" style={{ background: '#76B90018', color: '#76B900' }}>On-Prem / Data Center</span>
               </div>
 
               {/* No direct savings callout */}
-              <div className="flex items-start gap-2 px-4 py-3 rounded-xl mb-5 text-xs" style={{ background: 'rgba(237,39,56,0.06)', border: '1px solid rgba(237,39,56,0.15)' }}>
+              <div className="flex items-start gap-2 px-4 py-3 rounded-xl mb-5 text-sm" style={{ background: 'rgba(237,39,56,0.06)', border: '1px solid rgba(237,39,56,0.15)' }}>
                 <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-[#ED2738]" />
                 <span style={{ color: 'var(--text-secondary)' }}>
                   <strong>Important:</strong> Your GPU is already paid for — there is no per-token bill.
@@ -782,7 +782,7 @@ export default function ROICalculator() {
 
               {/* Source 1 — Throughput */}
               <div className="rounded-2xl p-4 mb-3" style={{ background: '#76B90010', border: '1px solid #76B90025' }}>
-                <div className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: '#76B900' }}>
+                <div className="font-semibold text-base mb-3 flex items-center gap-2" style={{ color: '#76B900' }}>
                   <Zap className="w-4 h-4" /> Source 1: Throughput Multiplier (same GPU, more users)
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -790,7 +790,7 @@ export default function ROICalculator() {
                   <KpiCard value={`${roi.gpuUtilFreedPct.toFixed(1)}`} label="GPU Compute Freed" sublabel="Available for net-new workloads" color="#76B900" suffix="%" />
                 </div>
                 {/* Formula callout */}
-                <div className="mt-3 rounded-xl p-3 text-xs space-y-1.5" style={{ background: 'rgba(118,185,0,0.06)', border: '1px solid rgba(118,185,0,0.15)' }}>
+                <div className="mt-3 rounded-xl p-3 text-sm space-y-1.5" style={{ background: 'rgba(118,185,0,0.06)', border: '1px solid rgba(118,185,0,0.15)' }}>
                   <div className="font-semibold" style={{ color: '#76B900' }}>How we calculate these numbers:</div>
                   <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                     <span style={{ color: '#76B900' }}>{roi.throughputMultiplier.toFixed(0)}×</span> = ({fmtNum(systemTokens)} + {avgNewTokens}) ÷ {avgNewTokens}
@@ -805,7 +805,7 @@ export default function ROICalculator() {
 
               {/* Source 2 — CapEx Avoidance */}
               <div className="rounded-2xl p-4 mb-3" style={{ background: '#1A81AF10', border: '1px solid #1A81AF25' }}>
-                <div className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: '#1A81AF' }}>
+                <div className="font-semibold text-base mb-3 flex items-center gap-2" style={{ color: '#1A81AF' }}>
                   <TrendingUp className="w-4 h-4" /> Source 2: CapEx Avoidance (GPU servers not purchased)
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -814,7 +814,7 @@ export default function ROICalculator() {
                   <KpiCard value={fmt$(roi.annualCapexAmortised)} label="Annual Equivalent" sublabel="Over 3-yr server lifecycle" color="#1A81AF" />
                 </div>
                 {/* Formula callout */}
-                <div className="mt-3 rounded-xl p-3 text-xs space-y-1.5" style={{ background: 'rgba(26,129,175,0.06)', border: '1px solid rgba(26,129,175,0.15)' }}>
+                <div className="mt-3 rounded-xl p-3 text-sm space-y-1.5" style={{ background: 'rgba(26,129,175,0.06)', border: '1px solid rgba(26,129,175,0.15)' }}>
                   <div className="font-semibold" style={{ color: '#1A81AF' }}>How we calculate these numbers:</div>
                   <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                     Servers needed <strong>without</strong> cache = ⌈{fmtNum(dailyRequests)} req/day ÷ 200K req/server⌉ = <span style={{ color: '#ED2738' }}>{roi.serversNeededWithout}</span>
@@ -833,7 +833,7 @@ export default function ROICalculator() {
 
               {/* Source 3 — Power */}
               <div className="rounded-2xl p-4" style={{ background: '#f59e0b10', border: '1px solid #f59e0b25' }}>
-                <div className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: '#f59e0b' }}>
+                <div className="font-semibold text-base mb-3 flex items-center gap-2" style={{ color: '#f59e0b' }}>
                   ⚡ Source 3: Power / Electricity Savings (OpEx)
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -842,7 +842,7 @@ export default function ROICalculator() {
                   <KpiCard value={fmt$(roi.powerSavedUsdAnnually)} label="Power Cost Saved/Year" sublabel="@$0.10/kWh data center rate" color="#f59e0b" />
                 </div>
                 {/* Formula callout */}
-                <div className="mt-3 rounded-xl p-3 text-xs space-y-1.5" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
+                <div className="mt-3 rounded-xl p-3 text-sm space-y-1.5" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
                   <div className="font-semibold" style={{ color: '#f59e0b' }}>How we calculate these numbers:</div>
                   <div className="font-mono" style={{ color: 'var(--text-secondary)' }}>
                     DGX-hours/yr = {roi.gpuHoursSavedPerDay.toFixed(1)} hrs/day × 365 = <span style={{ color: '#f59e0b' }}>{roi.gpuHoursSavedAnnually.toFixed(0)} hrs</span>
@@ -860,11 +860,11 @@ export default function ROICalculator() {
               <div className="mt-4 p-4 rounded-2xl" style={{ background: 'linear-gradient(135deg, #76B90015, #1A81AF10)', border: '2px solid #76B90030' }}>
                 <div className="grid grid-cols-2 gap-4 items-center">
                   <div>
-                    <div className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Combined Annual Value</div>
-                    <div className="font-mono font-black" style={{ color: '#76B900', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>{fmt$(roi.totalSelfHostedAnnual)}</div>
-                    <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>CapEx (amortised) + Power savings</div>
+                    <div className="text-sm font-bold uppercase tracking-wide mb-1" style={{ color: 'var(--text-muted)' }}>Combined Annual Value</div>
+                    <div className="font-mono font-black" style={{ color: '#76B900', fontSize: 'clamp(1.9rem, 3.6vw, 2.9rem)' }}>{fmt$(roi.totalSelfHostedAnnual)}</div>
+                    <div className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>CapEx (amortised) + Power savings</div>
                   </div>
-                  <div className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  <div className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                     <div className="flex justify-between py-1 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
                       <span>CapEx avoidance (÷ 3yr)</span>
                       <span className="font-mono font-semibold" style={{ color: '#1A81AF' }}>{fmt$(roi.annualCapexAmortised)}/yr</span>
@@ -883,11 +883,11 @@ export default function ROICalculator() {
           {/* Technical Assumptions Disclosure */}
           <motion.div layout>
             <details className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
-              <summary className="px-4 py-3 cursor-pointer text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
+              <summary className="px-4 py-3 cursor-pointer text-sm font-semibold uppercase tracking-wider flex items-center gap-2"
                 style={{ background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', listStyle: 'none' }}>
                 <Info className="w-3.5 h-3.5" /> Technical Assumptions &amp; Methodology
               </summary>
-              <div className="p-4 text-xs space-y-2" style={{ color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)' }}>
+              <div className="p-4 text-sm space-y-2" style={{ color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)' }}>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
                   {[
                     ['Prefill throughput', '10,000 tok/s — H100 DGX 8×, Llama 70B-class, vLLM tensor-parallel'],
@@ -907,7 +907,7 @@ export default function ROICalculator() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 pt-2 border-t text-xs" style={{ borderColor: 'rgba(255,255,255,0.06)', color: 'var(--text-muted)' }}>
+                <div className="mt-3 pt-2 border-t text-sm" style={{ borderColor: 'rgba(255,255,255,0.06)', color: 'var(--text-muted)' }}>
                   All calculations assume reusable system prompt context with stable hit rate.
                   Cloud API savings assume full token bypass (self-hosted vLLM + DDN Infinia replaces cloud API).
                   GPU-hours represent DGX-level compute time, not per-GPU.
@@ -921,14 +921,14 @@ export default function ROICalculator() {
             <div className="flex items-start gap-3">
               <Users className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: accent }} />
               <div>
-                <div className="font-semibold text-sm mb-1" style={{ color: 'var(--text-primary)' }}>
+                <div className="font-semibold text-base mb-1" style={{ color: 'var(--text-primary)' }}>
                   {isNcp
                     ? 'The Neocloud (NCP) Business Case'
                     : isCloud
                     ? 'Why the invoice number is so large'
                     : 'The right conversation to have with the CFO'}
                 </div>
-                <div className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                <div className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                   {isNcp
                     ? <>For an AI Cloud Provider serving <strong>{fmtNum(dailyRequests)}</strong> queries/day, prefill recomputation burns <strong>{fmtNum(roi.gpuHoursSavedAnnually)} GPU-hours/year</strong>. DDN Infinia reclaims that compute, unlocking <strong style={{ color: '#00C280' }}>{fmt$(roi.annualNcpReclaimedValue)} in sellable capacity</strong> and avoiding <strong style={{ color: '#1A81AF' }}>{roi.serversAvoided} DGX H100 servers ({fmt$(roi.capexAvoidance)})</strong> in new CapEx.</>
                     : isCloud
